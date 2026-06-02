@@ -21,7 +21,7 @@ class User(commands.Cog):
         embed.set_thumbnail(url=interaction.user.display_avatar.url)
         embed.add_field(name="Pending Robux", value=f"{pending:,}", inline=True)
         embed.add_field(name="Paid Robux", value=f"{paid:,}", inline=True)
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+        await interaction.response.send_message(embed=embed)
 
 
 async def setup(bot: commands.Bot) -> None:

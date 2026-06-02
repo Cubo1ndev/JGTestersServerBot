@@ -46,7 +46,7 @@ class Admin(commands.Cog):
         msg = f"Added **{amount:,} pending Robux** to {user.mention}. New pending: **{pending:,}**."
         if reason:
             msg += f"\nReason: *{reason}*"
-        await interaction.response.send_message(embed=_ok(msg), ephemeral=True)
+        await interaction.response.send_message(embed=_ok(msg))
 
     # /confirmpay
     @app_commands.command(name="confirmpay", description="Move all pending Robux to paid for a user")
@@ -65,8 +65,7 @@ class Admin(commands.Cog):
             return
         await database.add_history(interaction.user.id, user.id, "confirmpay", moved)
         await interaction.response.send_message(
-            embed=_ok(f"Marked **{moved:,} Robux** as paid for {user.mention}."),
-            ephemeral=True,
+            embed=_ok(f"Marked **{moved:,} Robux** as paid for {user.mention}.")
         )
 
     # /adjust
