@@ -35,6 +35,9 @@ class Bot(commands.Bot):
             await self.tree.sync()
 
     async def on_ready(self) -> None:
+        await self.change_presence(
+            activity=discord.CustomActivity(name="Guarding thy gold")
+        )
         print(f"Logged in as {self.user} (ID: {self.user.id})")
         print(f"Guild ID: {config.GUILD_ID or 'global'}")
         print("------")
