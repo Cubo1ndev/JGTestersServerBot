@@ -9,6 +9,7 @@ COGS = [
     "cogs.admin",
     "cogs.user",
     "cogs.history",
+    "cogs.leaderboard",
 ]
 
 intents = discord.Intents.default()

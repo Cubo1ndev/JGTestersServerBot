@@ -131,6 +131,28 @@ async def get_history(user_id: int) -> list[dict]:
     return [dict(r) for r in rows]
 
 
+async def get_top(field: str, limit: int = 10, offset: int = 0) -> list[tuple[str, int]]:
+    """Returns (user_id, amount) sorted descending for 'pending' or 'paid'."""
+    async with aiosqlite.connect(_db_path) as db:
+        async with db.execute(
+            f"SELECT user_id, {field} FROM wallets WHERE {field} > 0 "
+            f"ORDER BY {field} DESC LIMIT ? OFFSET ?",
+            (limit, offset),
+        ) as cur:
+            rows = await cur.fetchall()
+    return [(row[0], row[1]) for row in rows]
+
+
+async def count_top(field: str) -> int:
+    """Returns total number of users with field > 0."""
+    async with aiosqlite.connect(_db_path) as db:
+        async with db.execute(
+            f"SELECT COUNT(*) FROM wallets WHERE {field} > 0"
+        ) as cur:
+            row = await cur.fetchone()
+    return row[0]
+
+
 # --- Bot admins ---
 
 async def add_bot_admin(user_id: int, granted_by: int) -> bool:

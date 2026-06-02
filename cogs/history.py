@@ -100,17 +100,16 @@ class History(commands.Cog):
     ) -> None:
         entries = await database.get_history(user.id)
         if not entries:
-            embed = discord.Embed(
-                description=f"No history found for {user.mention}.",
-                color=discord.Color.greyple(),
+            await interaction.response.send_message(
+                embed=discord.Embed(
+                    description=f"No history found for {user.mention}.",
+                    color=discord.Color.greyple(),
+                )
             )
-            await interaction.response.send_message(embed=embed, ephemeral=True)
             return
 
         view = HistoryView(entries, user)
-        await interaction.response.send_message(
-            embed=view.current_embed(), view=view, ephemeral=True
-        )
+        await interaction.response.send_message(embed=view.current_embed(), view=view)
 
     @history.error
     async def history_error(
@@ -121,8 +120,7 @@ class History(commands.Cog):
                 embed=discord.Embed(
                     description="❌ You don't have permission to use this command.",
                     color=RED,
-                ),
-                ephemeral=True,
+                )
             )
 
 

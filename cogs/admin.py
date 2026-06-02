@@ -37,9 +37,7 @@ class Admin(commands.Cog):
         reason: str | None = None,
     ) -> None:
         if amount <= 0:
-            await interaction.response.send_message(
-                embed=_err("Amount must be greater than 0."), ephemeral=True
-            )
+            await interaction.response.send_message(embed=_err("Amount must be greater than 0."))
             return
         pending, _ = await database.add_pending(user.id, amount)
         await database.add_history(interaction.user.id, user.id, "give", amount, reason)
@@ -60,7 +58,7 @@ class Admin(commands.Cog):
         moved = await database.confirm_pay(user.id)
         if moved <= 0:
             await interaction.response.send_message(
-                embed=_err(f"{user.mention} has no pending Robux to pay."), ephemeral=True
+                embed=_err(f"{user.mention} has no pending Robux to pay.")
             )
             return
         await database.add_history(interaction.user.id, user.id, "confirmpay", moved)
@@ -84,9 +82,7 @@ class Admin(commands.Cog):
         reason: str | None = None,
     ) -> None:
         if amount == 0:
-            await interaction.response.send_message(
-                embed=_err("Amount cannot be 0."), ephemeral=True
-            )
+            await interaction.response.send_message(embed=_err("Amount cannot be 0."))
             return
         pending, _ = await database.add_pending(user.id, amount)
         await database.add_history(interaction.user.id, user.id, "adjust", amount, reason)
@@ -97,7 +93,7 @@ class Admin(commands.Cog):
         )
         if reason:
             msg += f"\nReason: *{reason}*"
-        await interaction.response.send_message(embed=_ok(msg), ephemeral=True)
+        await interaction.response.send_message(embed=_ok(msg))
 
     # /get
     @app_commands.command(name="get", description="View a user's pending and paid Robux totals")
@@ -109,14 +105,11 @@ class Admin(commands.Cog):
         user: discord.Member,
     ) -> None:
         pending, paid = await database.get_wallet(user.id)
-        embed = discord.Embed(
-            title=f"Wallet — {user.display_name}",
-            color=GREEN,
-        )
+        embed = discord.Embed(title=f"Wallet — {user.display_name}", color=GREEN)
         embed.set_thumbnail(url=user.display_avatar.url)
         embed.add_field(name="Pending Robux", value=f"{pending:,}", inline=True)
         embed.add_field(name="Paid Robux", value=f"{paid:,}", inline=True)
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+        await interaction.response.send_message(embed=embed)
 
     # /grant
     @app_commands.command(name="grant", description="Grant bot-admin permissions to a user")
@@ -130,12 +123,11 @@ class Admin(commands.Cog):
         added = await database.add_bot_admin(user.id, interaction.user.id)
         if not added:
             await interaction.response.send_message(
-                embed=_err(f"{user.mention} is already a bot admin."), ephemeral=True
+                embed=_err(f"{user.mention} is already a bot admin.")
             )
             return
         await interaction.response.send_message(
-            embed=_ok(f"{user.mention} has been granted bot-admin access."),
-            ephemeral=True,
+            embed=_ok(f"{user.mention} has been granted bot-admin access.")
         )
 
     # /revoke
@@ -150,12 +142,11 @@ class Admin(commands.Cog):
         removed = await database.remove_bot_admin(user.id)
         if not removed:
             await interaction.response.send_message(
-                embed=_err(f"{user.mention} is not a bot admin."), ephemeral=True
+                embed=_err(f"{user.mention} is not a bot admin.")
             )
             return
         await interaction.response.send_message(
-            embed=_ok(f"Removed bot-admin access from {user.mention}."),
-            ephemeral=True,
+            embed=_ok(f"Removed bot-admin access from {user.mention}.")
         )
 
     # Error handlers
@@ -168,8 +159,7 @@ class Admin(commands.Cog):
     ) -> None:
         if isinstance(error, app_commands.CheckFailure):
             await interaction.response.send_message(
-                embed=_err("You don't have permission to use this command."),
-                ephemeral=True,
+                embed=_err("You don't have permission to use this command.")
             )
 
     @grant.error
@@ -179,8 +169,7 @@ class Admin(commands.Cog):
     ) -> None:
         if isinstance(error, app_commands.MissingPermissions):
             await interaction.response.send_message(
-                embed=_err("Only Discord server administrators can use this command."),
-                ephemeral=True,
+                embed=_err("Only Discord server administrators can use this command.")
             )
 
 
